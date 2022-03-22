@@ -9,12 +9,11 @@ char *arg[5] = {};
 void Fetch();
 
 int main(){
-    //arg = (char*) malloc(512 * sizeof(char));
-    Fetch();
-    execvp(arg[0], arg);
-   
-    
-
+    while(1)
+    {
+        Fetch();
+        execvp(arg[0], arg);
+    }
     return 0;
 }
 
