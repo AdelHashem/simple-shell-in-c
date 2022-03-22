@@ -9,6 +9,7 @@ char *arg[5] = {};
 void Fetch();
 
 int main(){
+    welcomeScreen();
     while(1)
     {
         Fetch();
@@ -45,4 +46,13 @@ int Background_detect()// detect The & in the command
         i++;
     }
     return 0;
+}
+
+void welcomeScreen(){
+        printf("\n\t============================================\n");
+        printf("\t               Simple C Shell\n");
+        printf("\t--------------------------------------------\n");
+        printf("\t             Adel Hashem (18010880)");
+        printf("\t============================================\n");
+        printf("\n\n");
 }
