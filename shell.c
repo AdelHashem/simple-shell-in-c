@@ -17,20 +17,20 @@ int main(){
     welcomeScreen();
     while(1)
     {
-        memset ( arg, '\0', 20 );
-        char cwd[300];
-        getcwd(cwd,sizeof(cwd));
+        memset ( arg, '\0', 20 ); // avoid noise and last loop
+        char cwd[300]; // to carry the path
+        getcwd(cwd,sizeof(cwd)); // get current path
         printf("%s>",cwd);
-        Fetch();
+        Fetch(); // get line and spliting it
 
-        if(strcmp(arg[0],"cd") == 0){
+        if(strcmp(arg[0],"cd") == 0){ //is it a cd command?
             char para[256];
-            strcpy(para,arg[1]);
-        Change_Dir(para);
-        continue;
+            strcpy(para,arg[1]); // just copy the parameter to pass it safly to the fun
+            Change_Dir(para);
+            continue;
         }else
         {
-        process();
+        process(); // fork and exevp
         }
     }
     return 0;
@@ -39,7 +39,7 @@ int main(){
 void Fetch(){ // Get The I/P and split it to arguments
     char buffer[512];
     memset ( buffer, '\0', 512 ); // set the values to Null
-    fgets(buffer, 512, stdin);
+    fgets(buffer, 512, stdin); //avoid gets problems
 
     char *token = strtok(buffer, " "); //split every word when catch space
     int i = 0;
@@ -75,7 +75,7 @@ void process()
         printf("error occured in fork\n");
     else if(pid == 0)//child
     {
-       if(execvp(arg[0], arg) < 0)
+       if(execvp(arg[0], arg) < 0)  // handle errors and print the details
        {
            perror("execvp");
             exit(EXIT_FAILURE);
@@ -100,13 +100,20 @@ void process()
 
 }
 
-void Change_Dir(const char* param){
+/* Handling cd Command in 3 Cases
+1. when enter full path ex: /home/username/Desktop (always starts with "/")
+2. when enter "~" then A folder in the /home/username/ ex: ~/Desktop  (always starts with "~/" )
+3. when enter direct the folder name in the cwd ex: /home/user> cd Desktop
+(cd ..) is handled by dafult fun chdir in the 3rd case
+*/
+void Change_Dir(const char* param){ 
     char path[512] = {};
+    //case 1
     if(param[0] == '/')
     {
-        if(chdir(param) < 0)
+        if(chdir(param) < 0) // handle errors and print the details
             perror("chdir");
-
+    //case 2
     }else if(param[0] == '~')
     {
         char username[50];
@@ -114,13 +121,14 @@ void Change_Dir(const char* param){
         strcpy(path,"/home/");
         strcat(path,username);
         strcat(path,param+1);
-        if(chdir(path) < 0)
+        if(chdir(path) < 0) // handle errors and print the details
             perror("chdir");
+    //case 3
     }else{
         getcwd(path,sizeof(path));
         strcat(path,"/");
         strcat(path,param);
-        if(chdir(path) < 0)
+        if(chdir(path) < 0) // handle errors and print the details
             perror("chdir");
     }
 
