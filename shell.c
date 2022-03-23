@@ -16,8 +16,11 @@ int main(){
     welcomeScreen();
     while(1)
     {
+        char cwd[300];
+        getcwd(cwd,sizeof(cwd));
+        printf("%s>",cwd);
         Fetch();
-        
+
         process();
     }
     return 0;
@@ -64,7 +67,12 @@ void process()
         printf("error occured in fork\n");
     else if(pid == 0)//child
     {
-        execvp(arg[0], arg);
+       if(execvp(arg[0], arg) < 0)
+       {
+           perror("execvp");
+            exit(EXIT_FAILURE);
+       }
+
     }
     else   //Parent (the main process)
     {
