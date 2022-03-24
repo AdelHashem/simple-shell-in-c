@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <signal.h>
+#include <time.h>
 #include <sys/wait.h>
 
 
@@ -11,8 +13,13 @@ void Fetch();
 int Background_detect();
 void process();
 void Change_Dir(const char *param);
+void logfile(int sgn);
 char *arg[20] = {};
+char logpath[256];
+FILE *f;
 int main(){
+    getcwd(logpath,sizeof(logpath));
+    strcat(logpath,"/log.txt");
 
     welcomeScreen();
     while(1)
@@ -32,6 +39,7 @@ int main(){
         {
         process(); // fork and exevp
         }
+        signal(SIGCHLD,logfile);
     }
     return 0;
 }
@@ -131,6 +139,17 @@ void Change_Dir(const char* param){
         if(chdir(path) < 0) // handle errors and print the details
             perror("chdir");
     }
+
+}
+
+void logfile(int sgn){
+    f = fopen(logpath,"a");
+    time_t rawtime;
+    struct tm * timeinfo;
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    fprintf(f,"Child process was terminated\t [%s]\n",asctime(timeinfo));
+    fclose(f);
 
 }
 
