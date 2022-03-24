@@ -14,6 +14,7 @@ int Background_detect();
 void process();
 void Change_Dir(const char *param);
 void logfile(int sgn);
+void welcomeScreen();
 char *arg[20] = {};
 char logpath[256];
 FILE *f;
@@ -24,7 +25,7 @@ int main(){
     welcomeScreen();
     while(1)
     {
-        memset ( arg, '\0', 20 ); // avoid noise and last loop
+        memset ( arg, '\0', sizeof(arg) ); // avoid noise and last loop
         char cwd[300]; // to carry the path
         getcwd(cwd,sizeof(cwd)); // get current path
         printf("%s>",cwd);
@@ -32,7 +33,7 @@ int main(){
 
         if(strcmp(arg[0],"cd") == 0){ //is it a cd command?
             char para[256];
-            strcpy(para,arg[1]); // just copy the parameter to pass it safly to the fun
+            strcpy(para,arg[1]); // just copying the parameter to pass it safly to the fun
             Change_Dir(para);
             continue;
         }else
@@ -95,6 +96,7 @@ void process()
 
         if (flag == 1)   //see if there is "&"
         {
+            sleep(1);
             return;  //don't wait the child to end
         }
         else // wait the child
@@ -102,7 +104,7 @@ void process()
             if (waitpid(pid, &waitStatus, WUNTRACED | WCONTINUED) == -1) {
                 printf("error occured in waitpidn");
                 exit(EXIT_FAILURE);
-    }
+            }
         }
     }
 
@@ -114,7 +116,7 @@ void process()
 3. when enter direct the folder name in the cwd ex: /home/user> cd Desktop
 (cd ..) is handled by dafult fun chdir in the 3rd case
 */
-void Change_Dir(const char* param){ 
+void Change_Dir(const char* param){
     char path[512] = {};
     //case 1
     if(param[0] == '/')
