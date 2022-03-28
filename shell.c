@@ -36,11 +36,15 @@ int main(){
             strcpy(para,arg[1]); // just copying the parameter to pass it safly to the fun
             Change_Dir(para);
             continue;
-        }else
+        }
+        else if (strcmp(command,"exit") == 0){ //terminate
+            exit(0);
+        }
+        else
         {
         process(); // fork and exevp
         }
-        signal(SIGCHLD,logfile);
+        signal(SIGCHLD,logfile); //signal Handler
     }
     return 0;
 }
