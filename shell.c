@@ -8,16 +8,18 @@
 #include <time.h>
 #include <sys/wait.h>
 
-
+//Funs
 void Fetch();
 int Background_detect();
 void process();
 void Change_Dir(const char *param);
 void logfile(int sgn);
 void welcomeScreen();
-char *arg[20] = {};
-char logpath[256];
-FILE *f;
+//Global Var
+char *arg[20] = {}; // to carry the parameters
+char logpath[256]; // to carry the log file path
+FILE *f; // to carry the log file
+
 int main(){
     getcwd(logpath,sizeof(logpath));
     strcat(logpath,"/log.txt");
@@ -37,7 +39,7 @@ int main(){
             Change_Dir(para);
             continue;
         }
-        else if (strcmp(command,"exit") == 0){ //terminate
+        else if (strcmp(arg[0],"exit") == 0){ //terminate
             exit(0);
         }
         else
@@ -163,7 +165,9 @@ void welcomeScreen(){
         printf("\n\t============================================\n");
         printf("\t               Simple C Shell\n");
         printf("\t--------------------------------------------\n");
-        printf("\t             Adel Hashem (18010880)\n");
+        printf("\t             Adel Hashem   (18010880)\n");
+        printf("\t             Mahmoud Ahmed (18011654)\n");
+        printf("\t             Mostafa Ahmed (18011775)\n");
         printf("\t============================================\n");
         printf("\n\n");
 }
