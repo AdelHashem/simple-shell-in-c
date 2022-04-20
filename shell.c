@@ -25,6 +25,7 @@ int main(){
     strcat(logpath,"/log.txt");
 
     welcomeScreen();
+    signal(SIGCHLD,logfile); //signal Handler
     while(1)
     {
         memset ( arg, '\0', sizeof(arg) ); // avoid noise and last loop
@@ -46,7 +47,7 @@ int main(){
         {
         process(); // fork and exevp
         }
-        signal(SIGCHLD,logfile); //signal Handler
+        
     }
     return 0;
 }
